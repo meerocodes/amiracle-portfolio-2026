@@ -300,6 +300,38 @@ const SystemHUD: React.FC = () => {
   }, [isOpen, setTerminalOpen]);
 
   useEffect(() => {
+    const shouldLockScroll = isOpen && mode !== 'shell';
+    if (!shouldLockScroll) return;
+
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    const preventScrollKeys = (e: KeyboardEvent) => {
+      const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+      if (keys.includes(e.key)) {
+        e.preventDefault();
+      }
+    };
+    const preventWheel = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('wheel', preventWheel, { passive: false });
+    window.addEventListener('keydown', preventScrollKeys, { passive: false });
+    window.addEventListener('touchmove', preventWheel, { passive: false });
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.documentElement.style.overflow = previousHtmlOverflow;
+      window.removeEventListener('wheel', preventWheel);
+      window.removeEventListener('keydown', preventScrollKeys);
+      window.removeEventListener('touchmove', preventWheel);
+    };
+  }, [isOpen, mode]);
+
+  useEffect(() => {
     localStorage.setItem('terminalTheme', terminalTheme);
   }, [terminalTheme]);
 
