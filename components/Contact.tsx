@@ -54,7 +54,7 @@ const Contact: React.FC = () => {
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-slate-900 dark:text-white focus:border-neon-indigo dark:focus:border-neon-purple focus:outline-none transition-colors" 
+                            className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-[16px] text-slate-900 dark:text-white focus:border-neon-indigo dark:focus:border-neon-purple focus:outline-none transition-colors" 
                             placeholder="John Doe" 
                             required
                         />
@@ -66,7 +66,7 @@ const Contact: React.FC = () => {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-slate-900 dark:text-white focus:border-neon-indigo dark:focus:border-neon-purple focus:outline-none transition-colors" 
+                            className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-[16px] text-slate-900 dark:text-white focus:border-neon-indigo dark:focus:border-neon-purple focus:outline-none transition-colors" 
                             placeholder="john@example.com" 
                             required
                         />
@@ -79,7 +79,7 @@ const Contact: React.FC = () => {
                         value={formData.message}
                         onChange={handleChange}
                         rows={4} 
-                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-slate-900 dark:text-white focus:border-neon-indigo dark:focus:border-neon-purple focus:outline-none transition-colors" 
+                        className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg p-3 text-[16px] text-slate-900 dark:text-white focus:border-neon-indigo dark:focus:border-neon-purple focus:outline-none transition-colors" 
                         placeholder="Tell me about your project..."
                         required
                     ></textarea>

@@ -511,7 +511,7 @@ const SystemHUD: React.FC = () => {
                                             type="text" 
                                             value={input}
                                             onChange={(e) => setInput(e.target.value)}
-                                            className="bg-transparent border-none outline-none flex-1 text-white placeholder-slate-700"
+                                            className="bg-transparent border-none outline-none flex-1 text-[16px] md:text-xs text-white placeholder-slate-700"
                                             placeholder="Type 'help'..."
                                             autoFocus
                                             autoComplete="off"

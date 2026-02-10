@@ -5,13 +5,14 @@ import { motion } from 'framer-motion';
 // --- Shared Props ---
 // Icons will inherit hover state from parent "group" via variants or receive direct props if needed.
 
-export const KidcentralIcon: React.FC = () => {
+export const KidcentralIcon: React.FC<{ forceHover?: boolean }> = ({ forceHover }) => {
   return (
     <div className="w-full h-full flex items-center justify-center bg-blue-100 dark:bg-slate-900 overflow-hidden transition-colors duration-300">
       <motion.svg 
         viewBox="0 0 200 200" 
         className="w-3/5 h-3/5 drop-shadow-xl"
         initial="idle"
+        animate={forceHover ? "hover" : "idle"}
         whileHover="hover"
       >
         {/* Baby Shorts - Attached to bottom of shirt */}
@@ -64,7 +65,7 @@ export const KidcentralIcon: React.FC = () => {
   );
 };
 
-export const OudieIcon: React.FC = () => {
+export const OudieIcon: React.FC<{ forceHover?: boolean }> = ({ forceHover }) => {
   // Enhanced Mist particles for "Towards User" effect
   // We use scale to simulate z-axis movement (coming closer)
   const particles = Array.from({ length: 12 }).map((_, i) => ({
@@ -80,6 +81,7 @@ export const OudieIcon: React.FC = () => {
         viewBox="0 0 200 200" 
         className="w-3/5 h-3/5 drop-shadow-2xl"
         initial="idle"
+        animate={forceHover ? "hover" : "idle"}
         whileHover="hover"
       >
         {/* Perfume Bottle Group */}
@@ -158,13 +160,14 @@ export const OudieIcon: React.FC = () => {
   );
 };
 
-export const TravelLoungeIcon: React.FC = () => {
+export const TravelLoungeIcon: React.FC<{ forceHover?: boolean }> = ({ forceHover }) => {
   return (
     <div className="w-full h-full flex items-center justify-center bg-sky-100 dark:bg-slate-900 overflow-hidden relative transition-colors duration-300">
       {/* Moving Road Lines */}
       <motion.div 
          className="absolute inset-0 flex flex-col justify-center items-center opacity-20"
          initial="idle"
+         animate={forceHover ? "hover" : "idle"}
          whileHover="hover"
       >
          {[...Array(5)].map((_, i) => (
@@ -183,6 +186,7 @@ export const TravelLoungeIcon: React.FC = () => {
         viewBox="0 0 200 100" 
         className="w-4/5 h-4/5 z-10"
         initial="idle"
+        animate={forceHover ? "hover" : "idle"}
         whileHover="hover"
       >
          <motion.g
@@ -258,7 +262,7 @@ export const TravelLoungeIcon: React.FC = () => {
   );
 };
 
-export const MeccaverseIcon: React.FC = () => {
+export const MeccaverseIcon: React.FC<{ forceHover?: boolean }> = ({ forceHover }) => {
   // Generate pilgrim dots for Tawaf
   const dots = Array.from({ length: 24 }).map((_, i) => i);
   const radius = 80;
@@ -269,6 +273,7 @@ export const MeccaverseIcon: React.FC = () => {
         viewBox="0 0 200 200" 
         className="w-3/5 h-3/5 drop-shadow-2xl"
         initial="idle"
+        animate={forceHover ? "hover" : "idle"}
         whileHover="hover"
       >
         {/* Glow Effect */}

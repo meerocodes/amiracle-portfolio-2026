@@ -89,12 +89,12 @@ const labsData = [
 ];
 
 // --- Helper for rendering correct icon ---
-const getProjectIcon = (title: string) => {
+const getProjectIcon = (title: string, forceHover?: boolean) => {
     switch(title) {
-        case "MECCAVERSE": return <MeccaverseIcon />;
-        case "TRAVEL LOUNGE": return <TravelLoungeIcon />;
-        case "OUDIE": return <OudieIcon />;
-        case "KIDCENTRAL": return <KidcentralIcon />;
+        case "MECCAVERSE": return <MeccaverseIcon forceHover={forceHover} />;
+        case "TRAVEL LOUNGE": return <TravelLoungeIcon forceHover={forceHover} />;
+        case "OUDIE": return <OudieIcon forceHover={forceHover} />;
+        case "KIDCENTRAL": return <KidcentralIcon forceHover={forceHover} />;
         default: return null;
     }
 };
@@ -241,6 +241,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick, isHi
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
+  const [isTouchHover, setIsTouchHover] = useState(false);
+  const touchTimeoutRef = useRef<number | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
@@ -263,10 +265,26 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick, isHi
         onClick(project, rect);
     }
   };
+  const handleTouchStart = () => {
+    setIsTouchHover(true);
+    if (touchTimeoutRef.current) window.clearTimeout(touchTimeoutRef.current);
+    touchTimeoutRef.current = window.setTimeout(() => setIsTouchHover(false), 1500);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchTimeoutRef.current) window.clearTimeout(touchTimeoutRef.current);
+    touchTimeoutRef.current = window.setTimeout(() => setIsTouchHover(false), 150);
+  };
 
   const rotateX = useTransform(mouseY, [-0.5, 0.5], [10, -10]);
   const rotateY = useTransform(mouseX, [-0.5, 0.5], [-10, 10]);
   const shineOpacity = useTransform(mouseY, [-0.5, 0.5], [0, 0.4]);
+  
+  useEffect(() => {
+    return () => {
+      if (touchTimeoutRef.current) window.clearTimeout(touchTimeoutRef.current);
+    };
+  }, []);
 
   return (
     <motion.div
@@ -282,6 +300,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick, isHi
             onClick={handleClick}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             style={{
               rotateX,
               rotateY,
@@ -305,7 +325,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, onClick, isHi
                     style={{ scale: 1.1 }}
                     className="w-full h-full flex items-center justify-center"
                 >
-                    {getProjectIcon(project.title)}
+                    {getProjectIcon(project.title, isTouchHover)}
                 </motion.div>
                 
                 {/* Updated "Click to Expand" positioning to avoid covering center content */}
