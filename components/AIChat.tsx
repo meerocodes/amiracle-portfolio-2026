@@ -285,10 +285,10 @@ const SystemHUD: React.FC = () => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>(["Welcome to AmiracleOS v2.1", "Type 'help' for commands."]);
   const [mode, setMode] = useState<'shell' | 'snake' | 'memory'>('shell');
-  const [terminalTheme, setTerminalTheme] = useState<'neon' | 'amber' | 'mono'>(() => {
+  const [terminalTheme, setTerminalTheme] = useState<'neon' | 'amber' | 'mono' | 'ice'>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('terminalTheme');
-      if (saved === 'neon' || saved === 'amber' || saved === 'mono') return saved;
+      if (saved === 'neon' || saved === 'amber' || saved === 'mono' || saved === 'ice') return saved;
     }
     return 'neon';
   });
@@ -347,13 +347,14 @@ const SystemHUD: React.FC = () => {
                   "Theme options:",
                   "  theme neon   - Default neon HUD",
                   "  theme amber  - Warm amber terminal",
-                  "  theme mono   - Minimal monochrome"
+                  "  theme mono   - Minimal monochrome",
+                  "  theme ice    - Light background, dark text"
               );
-          } else if (choice === 'neon' || choice === 'amber' || choice === 'mono') {
+          } else if (choice === 'neon' || choice === 'amber' || choice === 'mono' || choice === 'ice') {
               setTerminalTheme(choice);
               newHistory.push(`Terminal theme set to: ${choice}`);
           } else {
-              newHistory.push("Unknown theme. Try: theme neon | theme amber | theme mono");
+              newHistory.push("Unknown theme. Try: theme neon | theme amber | theme mono | theme ice");
           }
           setHistory(newHistory);
           setInput('');
@@ -406,7 +407,16 @@ const SystemHUD: React.FC = () => {
       setInput('');
   };
 
-  const terminalThemeClasses = terminalTheme === 'amber'
+  const terminalThemeClasses = terminalTheme === 'ice'
+    ? {
+        shellBg: 'bg-white',
+        shellBorder: 'border-slate-200',
+        shellText: 'text-slate-900',
+        shellMuted: 'text-slate-500',
+        shellPrompt: 'text-slate-700',
+        shellAccent: 'text-slate-800'
+      }
+    : terminalTheme === 'amber'
     ? {
         shellBg: 'bg-[#160f08]',
         shellBorder: 'border-amber-900/60',

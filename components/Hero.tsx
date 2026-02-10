@@ -64,8 +64,8 @@ const RoleScrambler: React.FC<{ text: string; hoverText: string; delay: number }
     <motion.div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      // Use inline-grid to stack elements. justify-items-center centers the text within the reserved width.
-      className="relative cursor-pointer group inline-grid grid-cols-1 grid-rows-1 items-center justify-items-center"
+      // Use inline-grid to stack elements. Left alignment is enforced for consistent layout.
+      className="relative cursor-pointer group inline-grid grid-cols-1 grid-rows-1 items-center justify-items-start"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: delay }}
@@ -74,17 +74,17 @@ const RoleScrambler: React.FC<{ text: string; hoverText: string; delay: number }
         <div className={`col-start-1 row-start-1 w-full h-full absolute -inset-2 bg-neon-indigo/10 dark:bg-neon-cyan/10 rounded-lg transform scale-95 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 -z-10 translate-y-1`} />
         
         {/* Ghost Elements for Layout Stability - Reserves space for the widest possible text */}
-        <span className={`${fontClasses} col-start-1 row-start-1 opacity-0 pointer-events-none select-none invisible`} aria-hidden="true">
+        <span className={`${fontClasses} col-start-1 row-start-1 opacity-0 pointer-events-none select-none invisible text-left justify-self-start`} aria-hidden="true">
             {text}
         </span>
-        <span className={`${fontClasses} col-start-1 row-start-1 opacity-0 pointer-events-none select-none invisible`} aria-hidden="true">
+        <span className={`${fontClasses} col-start-1 row-start-1 opacity-0 pointer-events-none select-none invisible text-left justify-self-start`} aria-hidden="true">
             {hoverText}
         </span>
 
         {/* Visible Text - Absolute Positioned to prevent layout shifts during scramble */}
         <span 
             className={`
-                ${fontClasses} absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap z-10
+                ${fontClasses} absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap z-10 text-left
                 ${isHovered 
                     ? 'text-neon-indigo dark:text-neon-cyan drop-shadow-[0_0_8px_rgba(79,70,229,0.5)] dark:drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]' 
                     : 'text-outline text-slate-400/50 dark:text-slate-500/50'}
