@@ -285,12 +285,23 @@ const SystemHUD: React.FC = () => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>(["Welcome to AmiracleOS v2.1", "Type 'help' for commands."]);
   const [mode, setMode] = useState<'shell' | 'snake' | 'memory'>('shell');
+  const [terminalTheme, setTerminalTheme] = useState<'neon' | 'amber' | 'mono'>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('terminalTheme');
+      if (saved === 'neon' || saved === 'amber' || saved === 'mono') return saved;
+    }
+    return 'neon';
+  });
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setTerminalOpen(isOpen);
   }, [isOpen, setTerminalOpen]);
+
+  useEffect(() => {
+    localStorage.setItem('terminalTheme', terminalTheme);
+  }, [terminalTheme]);
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -329,6 +340,26 @@ const SystemHUD: React.FC = () => {
 
       const newHistory = [...history, `visitor@amiracle:~$ ${cmd}`];
 
+      if (cmd === 'theme' || cmd.startsWith('theme ')) {
+          const choice = cmd.replace('theme', '').trim();
+          if (!choice) {
+              newHistory.push(
+                  "Theme options:",
+                  "  theme neon   - Default neon HUD",
+                  "  theme amber  - Warm amber terminal",
+                  "  theme mono   - Minimal monochrome"
+              );
+          } else if (choice === 'neon' || choice === 'amber' || choice === 'mono') {
+              setTerminalTheme(choice);
+              newHistory.push(`Terminal theme set to: ${choice}`);
+          } else {
+              newHistory.push("Unknown theme. Try: theme neon | theme amber | theme mono");
+          }
+          setHistory(newHistory);
+          setInput('');
+          return;
+      }
+
       switch(cmd) {
           case 'help':
               newHistory.push(
@@ -338,6 +369,7 @@ const SystemHUD: React.FC = () => {
                   "  contact    - Get email", 
                   "  cd game    - Play Snake",
                   "  cd memory  - Play Memory Breach", 
+                  "  theme      - Terminal themes",
                   "  clear      - Clear terminal",
                   "  close      - Close terminal"
               );
@@ -373,6 +405,33 @@ const SystemHUD: React.FC = () => {
       setHistory(newHistory);
       setInput('');
   };
+
+  const terminalThemeClasses = terminalTheme === 'amber'
+    ? {
+        shellBg: 'bg-[#160f08]',
+        shellBorder: 'border-amber-900/60',
+        shellText: 'text-amber-100',
+        shellMuted: 'text-amber-400',
+        shellPrompt: 'text-amber-300',
+        shellAccent: 'text-amber-200'
+      }
+    : terminalTheme === 'mono'
+      ? {
+          shellBg: 'bg-[#0b0b0b]',
+          shellBorder: 'border-slate-800',
+          shellText: 'text-slate-100',
+          shellMuted: 'text-slate-400',
+          shellPrompt: 'text-slate-300',
+          shellAccent: 'text-slate-200'
+        }
+      : {
+          shellBg: 'bg-slate-950',
+          shellBorder: 'border-slate-300 dark:border-slate-700/50',
+          shellText: 'text-white',
+          shellMuted: 'text-slate-500',
+          shellPrompt: 'text-neon-pink',
+          shellAccent: 'text-neon-cyan'
+        };
 
   return (
     <>
@@ -484,34 +543,34 @@ const SystemHUD: React.FC = () => {
                         </div>
 
                         {/* Terminal / Game Area - Always Dark for Contrast */}
-                        <div className={`bg-slate-950 rounded-xl border border-slate-300 dark:border-slate-700/50 p-2 font-mono text-xs shadow-inner flex flex-col transition-all duration-300 ${mode !== 'shell' ? 'min-h-[350px]' : 'min-h-[200px]'}`}>
+                        <div className={`${terminalThemeClasses.shellBg} rounded-xl border ${terminalThemeClasses.shellBorder} p-2 font-mono text-xs shadow-inner flex flex-col transition-all duration-300 ${mode !== 'shell' ? 'min-h-[350px]' : 'min-h-[200px]'}`}>
                             {mode === 'snake' ? (
                                 <SnakeGame onExit={() => setMode('shell')} />
                             ) : mode === 'memory' ? (
                                 <MemoryGame onExit={() => setMode('shell')} />
                             ) : (
                                 <div className="flex-1 flex flex-col" onClick={() => inputRef.current?.focus()}>
-                                    <div className="flex-1 overflow-y-auto max-h-[200px] mb-2 space-y-1 text-slate-300 custom-scrollbar pr-2">
+                                    <div className={`flex-1 overflow-y-auto max-h-[200px] mb-2 space-y-1 ${terminalThemeClasses.shellText} custom-scrollbar pr-2`}>
                                         {history.map((line, i) => (
                                             <div key={i} className="break-words leading-relaxed">
                                                 {line.startsWith('visitor') ? (
-                                                    <span className="text-slate-500">{line}</span>
+                                                    <span className={terminalThemeClasses.shellMuted}>{line}</span>
                                                 ) : (
-                                                    <span className="text-neon-cyan">{line}</span>
+                                                    <span className={terminalThemeClasses.shellAccent}>{line}</span>
                                                 )}
                                             </div>
                                         ))}
                                         <div ref={bottomRef} />
                                     </div>
-                                    <form onSubmit={handleCommand} className="flex items-center gap-2 text-neon-cyan border-t border-slate-800 pt-2">
-                                        <span className="text-neon-pink">➜</span>
-                                        <span className="text-slate-500">~</span>
+                                    <form onSubmit={handleCommand} className={`flex items-center gap-2 ${terminalThemeClasses.shellAccent} border-t ${terminalThemeClasses.shellBorder} pt-2`}>
+                                        <span className={terminalThemeClasses.shellPrompt}>➜</span>
+                                        <span className={terminalThemeClasses.shellMuted}>~</span>
                                         <input 
                                             ref={inputRef}
                                             type="text" 
                                             value={input}
                                             onChange={(e) => setInput(e.target.value)}
-                                            className="bg-transparent border-none outline-none flex-1 text-[16px] md:text-xs text-white placeholder-slate-700"
+                                            className={`bg-transparent border-none outline-none flex-1 text-[16px] md:text-xs ${terminalThemeClasses.shellText} placeholder-slate-700`}
                                             placeholder="Type 'help'..."
                                             autoFocus
                                             autoComplete="off"

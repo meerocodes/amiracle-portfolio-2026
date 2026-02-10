@@ -151,8 +151,8 @@ export const OudieIcon: React.FC<{ forceHover?: boolean }> = ({ forceHover }) =>
                 <stop offset="100%" stopColor="#b45309" />
             </linearGradient>
             <radialGradient id="mistGradient">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-                <stop offset="100%" stopColor="#a7f3d0" stopOpacity="0" />
+                <stop offset="0%" stopColor="var(--mist-color)" stopOpacity="0.75" />
+                <stop offset="100%" stopColor="var(--mist-color)" stopOpacity="0" />
             </radialGradient>
         </defs>
       </motion.svg>
