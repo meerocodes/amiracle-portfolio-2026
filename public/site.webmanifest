@@ -1,0 +1,16 @@
+{
+  "name": "Amiracle",
+  "short_name": "Amiracle",
+  "description": "High-performance digital experiences.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
